@@ -34,5 +34,15 @@ int main(void)
     int val = 50;
     __asm volatile("MOV R0, %0": : "r"(val));
 
+    int control_reg;
+    //read CONTROL register to control_reg
+    __asm volatile("MRS %0, CONTROL": "=r"(control_reg));
+
+    int p1, *p2;
+
+    p2 = (int*)0x20000002;
+
+    __asm volatile("LDR %0, [%1]": "=r"(p1): "r"(p2));
+
     for(;;);
 }
