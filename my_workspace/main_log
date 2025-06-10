@@ -1,0 +1,553 @@
+
+main.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	b580      	push	{r7, lr}
+   2:	af00      	add	r7, sp, #0
+   4:	f7ff fffe 	bl	b2 <enable_processor_faults>
+   8:	f7ff fffe 	bl	0 <led_init_all>
+   c:	4806      	ldr	r0, [pc, #24]	@ (28 <main+0x28>)
+   e:	f7ff fffe 	bl	13c <init_scheduler_stack>
+  12:	f7ff fffe 	bl	146 <init_tasks_stack>
+  16:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+  1a:	f7ff fffe 	bl	d8 <init_systick_timer>
+  1e:	f7ff fffe 	bl	330 <switch_sp_to_psp>
+  22:	f7ff fffe 	bl	2c <idle_task>
+  26:	e7fe      	b.n	26 <main+0x26>
+  28:	2001ec00 	.word	0x2001ec00
+
+0000002c <idle_task>:
+  2c:	b480      	push	{r7}
+  2e:	af00      	add	r7, sp, #0
+  30:	e7fe      	b.n	30 <idle_task+0x4>
+
+00000032 <task1_handler>:
+  32:	b580      	push	{r7, lr}
+  34:	af00      	add	r7, sp, #0
+  36:	200c      	movs	r0, #12
+  38:	f7ff fffe 	bl	0 <led_on>
+  3c:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+  40:	f7ff fffe 	bl	370 <task_delay>
+  44:	200c      	movs	r0, #12
+  46:	f7ff fffe 	bl	0 <led_off>
+  4a:	f44f 707a 	mov.w	r0, #1000	@ 0x3e8
+  4e:	f7ff fffe 	bl	370 <task_delay>
+  52:	e7f0      	b.n	36 <task1_handler+0x4>
+
+00000054 <task2_handler>:
+  54:	b580      	push	{r7, lr}
+  56:	af00      	add	r7, sp, #0
+  58:	200d      	movs	r0, #13
+  5a:	f7ff fffe 	bl	0 <led_on>
+  5e:	f44f 70fa 	mov.w	r0, #500	@ 0x1f4
+  62:	f7ff fffe 	bl	370 <task_delay>
+  66:	200d      	movs	r0, #13
+  68:	f7ff fffe 	bl	0 <led_off>
+  6c:	f44f 70fa 	mov.w	r0, #500	@ 0x1f4
+  70:	f7ff fffe 	bl	370 <task_delay>
+  74:	e7f0      	b.n	58 <task2_handler+0x4>
+
+00000076 <task3_handler>:
+  76:	b580      	push	{r7, lr}
+  78:	af00      	add	r7, sp, #0
+  7a:	200e      	movs	r0, #14
+  7c:	f7ff fffe 	bl	0 <led_on>
+  80:	20fa      	movs	r0, #250	@ 0xfa
+  82:	f7ff fffe 	bl	370 <task_delay>
+  86:	200e      	movs	r0, #14
+  88:	f7ff fffe 	bl	0 <led_off>
+  8c:	20fa      	movs	r0, #250	@ 0xfa
+  8e:	f7ff fffe 	bl	370 <task_delay>
+  92:	e7f2      	b.n	7a <task3_handler+0x4>
+
+00000094 <task4_handler>:
+  94:	b580      	push	{r7, lr}
+  96:	af00      	add	r7, sp, #0
+  98:	200f      	movs	r0, #15
+  9a:	f7ff fffe 	bl	0 <led_on>
+  9e:	207d      	movs	r0, #125	@ 0x7d
+  a0:	f7ff fffe 	bl	370 <task_delay>
+  a4:	200f      	movs	r0, #15
+  a6:	f7ff fffe 	bl	0 <led_off>
+  aa:	207d      	movs	r0, #125	@ 0x7d
+  ac:	f7ff fffe 	bl	370 <task_delay>
+  b0:	e7f2      	b.n	98 <task4_handler+0x4>
+
+000000b2 <enable_processor_faults>:
+  b2:	b480      	push	{r7}
+  b4:	b083      	sub	sp, #12
+  b6:	af00      	add	r7, sp, #0
+  b8:	4b06      	ldr	r3, [pc, #24]	@ (d4 <enable_processor_faults+0x22>)
+  ba:	607b      	str	r3, [r7, #4]
+  bc:	687b      	ldr	r3, [r7, #4]
+  be:	681b      	ldr	r3, [r3, #0]
+  c0:	f443 22e0 	orr.w	r2, r3, #458752	@ 0x70000
+  c4:	687b      	ldr	r3, [r7, #4]
+  c6:	601a      	str	r2, [r3, #0]
+  c8:	bf00      	nop
+  ca:	370c      	adds	r7, #12
+  cc:	46bd      	mov	sp, r7
+  ce:	bc80      	pop	{r7}
+  d0:	4770      	bx	lr
+  d2:	bf00      	nop
+  d4:	e000ed24 	.word	0xe000ed24
+
+000000d8 <init_systick_timer>:
+  d8:	b480      	push	{r7}
+  da:	b087      	sub	sp, #28
+  dc:	af00      	add	r7, sp, #0
+  de:	6078      	str	r0, [r7, #4]
+  e0:	4b13      	ldr	r3, [pc, #76]	@ (130 <init_systick_timer+0x58>)
+  e2:	617b      	str	r3, [r7, #20]
+  e4:	4b13      	ldr	r3, [pc, #76]	@ (134 <init_systick_timer+0x5c>)
+  e6:	613b      	str	r3, [r7, #16]
+  e8:	4a13      	ldr	r2, [pc, #76]	@ (138 <init_systick_timer+0x60>)
+  ea:	687b      	ldr	r3, [r7, #4]
+  ec:	fbb2 f3f3 	udiv	r3, r2, r3
+  f0:	3b01      	subs	r3, #1
+  f2:	60fb      	str	r3, [r7, #12]
+  f4:	697b      	ldr	r3, [r7, #20]
+  f6:	681b      	ldr	r3, [r3, #0]
+  f8:	f003 427f 	and.w	r2, r3, #4278190080	@ 0xff000000
+  fc:	697b      	ldr	r3, [r7, #20]
+  fe:	601a      	str	r2, [r3, #0]
+ 100:	697b      	ldr	r3, [r7, #20]
+ 102:	681a      	ldr	r2, [r3, #0]
+ 104:	68fb      	ldr	r3, [r7, #12]
+ 106:	431a      	orrs	r2, r3
+ 108:	697b      	ldr	r3, [r7, #20]
+ 10a:	601a      	str	r2, [r3, #0]
+ 10c:	693b      	ldr	r3, [r7, #16]
+ 10e:	681b      	ldr	r3, [r3, #0]
+ 110:	f043 0206 	orr.w	r2, r3, #6
+ 114:	693b      	ldr	r3, [r7, #16]
+ 116:	601a      	str	r2, [r3, #0]
+ 118:	693b      	ldr	r3, [r7, #16]
+ 11a:	681b      	ldr	r3, [r3, #0]
+ 11c:	f043 0201 	orr.w	r2, r3, #1
+ 120:	693b      	ldr	r3, [r7, #16]
+ 122:	601a      	str	r2, [r3, #0]
+ 124:	bf00      	nop
+ 126:	371c      	adds	r7, #28
+ 128:	46bd      	mov	sp, r7
+ 12a:	bc80      	pop	{r7}
+ 12c:	4770      	bx	lr
+ 12e:	bf00      	nop
+ 130:	e000e014 	.word	0xe000e014
+ 134:	e000e010 	.word	0xe000e010
+ 138:	00f42400 	.word	0x00f42400
+
+0000013c <init_scheduler_stack>:
+ 13c:	4603      	mov	r3, r0
+ 13e:	f383 8808 	msr	MSP, r3
+ 142:	4770      	bx	lr
+ 144:	bf00      	nop
+
+00000146 <init_tasks_stack>:
+ 146:	b480      	push	{r7}
+ 148:	b085      	sub	sp, #20
+ 14a:	af00      	add	r7, sp, #0
+ 14c:	4b39      	ldr	r3, [pc, #228]	@ (234 <init_tasks_stack+0xee>)
+ 14e:	2200      	movs	r2, #0
+ 150:	721a      	strb	r2, [r3, #8]
+ 152:	4b38      	ldr	r3, [pc, #224]	@ (234 <init_tasks_stack+0xee>)
+ 154:	2200      	movs	r2, #0
+ 156:	761a      	strb	r2, [r3, #24]
+ 158:	4b36      	ldr	r3, [pc, #216]	@ (234 <init_tasks_stack+0xee>)
+ 15a:	2200      	movs	r2, #0
+ 15c:	f883 2028 	strb.w	r2, [r3, #40]	@ 0x28
+ 160:	4b34      	ldr	r3, [pc, #208]	@ (234 <init_tasks_stack+0xee>)
+ 162:	2200      	movs	r2, #0
+ 164:	f883 2038 	strb.w	r2, [r3, #56]	@ 0x38
+ 168:	4b32      	ldr	r3, [pc, #200]	@ (234 <init_tasks_stack+0xee>)
+ 16a:	2200      	movs	r2, #0
+ 16c:	f883 2048 	strb.w	r2, [r3, #72]	@ 0x48
+ 170:	4b30      	ldr	r3, [pc, #192]	@ (234 <init_tasks_stack+0xee>)
+ 172:	4a31      	ldr	r2, [pc, #196]	@ (238 <init_tasks_stack+0xf2>)
+ 174:	601a      	str	r2, [r3, #0]
+ 176:	4b2f      	ldr	r3, [pc, #188]	@ (234 <init_tasks_stack+0xee>)
+ 178:	4a30      	ldr	r2, [pc, #192]	@ (23c <init_tasks_stack+0xf6>)
+ 17a:	611a      	str	r2, [r3, #16]
+ 17c:	4b2d      	ldr	r3, [pc, #180]	@ (234 <init_tasks_stack+0xee>)
+ 17e:	4a30      	ldr	r2, [pc, #192]	@ (240 <init_tasks_stack+0xfa>)
+ 180:	621a      	str	r2, [r3, #32]
+ 182:	4b2c      	ldr	r3, [pc, #176]	@ (234 <init_tasks_stack+0xee>)
+ 184:	4a2f      	ldr	r2, [pc, #188]	@ (244 <init_tasks_stack+0xfe>)
+ 186:	631a      	str	r2, [r3, #48]	@ 0x30
+ 188:	4b2a      	ldr	r3, [pc, #168]	@ (234 <init_tasks_stack+0xee>)
+ 18a:	4a2f      	ldr	r2, [pc, #188]	@ (248 <init_tasks_stack+0x102>)
+ 18c:	641a      	str	r2, [r3, #64]	@ 0x40
+ 18e:	4b29      	ldr	r3, [pc, #164]	@ (234 <init_tasks_stack+0xee>)
+ 190:	4a2e      	ldr	r2, [pc, #184]	@ (24c <init_tasks_stack+0x106>)
+ 192:	60da      	str	r2, [r3, #12]
+ 194:	4b27      	ldr	r3, [pc, #156]	@ (234 <init_tasks_stack+0xee>)
+ 196:	4a2e      	ldr	r2, [pc, #184]	@ (250 <init_tasks_stack+0x10a>)
+ 198:	61da      	str	r2, [r3, #28]
+ 19a:	4b26      	ldr	r3, [pc, #152]	@ (234 <init_tasks_stack+0xee>)
+ 19c:	4a2d      	ldr	r2, [pc, #180]	@ (254 <init_tasks_stack+0x10e>)
+ 19e:	62da      	str	r2, [r3, #44]	@ 0x2c
+ 1a0:	4b24      	ldr	r3, [pc, #144]	@ (234 <init_tasks_stack+0xee>)
+ 1a2:	4a2d      	ldr	r2, [pc, #180]	@ (258 <init_tasks_stack+0x112>)
+ 1a4:	63da      	str	r2, [r3, #60]	@ 0x3c
+ 1a6:	4b23      	ldr	r3, [pc, #140]	@ (234 <init_tasks_stack+0xee>)
+ 1a8:	4a2c      	ldr	r2, [pc, #176]	@ (25c <init_tasks_stack+0x116>)
+ 1aa:	64da      	str	r2, [r3, #76]	@ 0x4c
+ 1ac:	2300      	movs	r3, #0
+ 1ae:	60bb      	str	r3, [r7, #8]
+ 1b0:	e037      	b.n	222 <init_tasks_stack+0xdc>
+ 1b2:	4a20      	ldr	r2, [pc, #128]	@ (234 <init_tasks_stack+0xee>)
+ 1b4:	68bb      	ldr	r3, [r7, #8]
+ 1b6:	011b      	lsls	r3, r3, #4
+ 1b8:	4413      	add	r3, r2
+ 1ba:	681b      	ldr	r3, [r3, #0]
+ 1bc:	60fb      	str	r3, [r7, #12]
+ 1be:	68fb      	ldr	r3, [r7, #12]
+ 1c0:	3b04      	subs	r3, #4
+ 1c2:	60fb      	str	r3, [r7, #12]
+ 1c4:	68fb      	ldr	r3, [r7, #12]
+ 1c6:	f04f 7280 	mov.w	r2, #16777216	@ 0x1000000
+ 1ca:	601a      	str	r2, [r3, #0]
+ 1cc:	68fb      	ldr	r3, [r7, #12]
+ 1ce:	3b04      	subs	r3, #4
+ 1d0:	60fb      	str	r3, [r7, #12]
+ 1d2:	4a18      	ldr	r2, [pc, #96]	@ (234 <init_tasks_stack+0xee>)
+ 1d4:	68bb      	ldr	r3, [r7, #8]
+ 1d6:	011b      	lsls	r3, r3, #4
+ 1d8:	4413      	add	r3, r2
+ 1da:	330c      	adds	r3, #12
+ 1dc:	681b      	ldr	r3, [r3, #0]
+ 1de:	461a      	mov	r2, r3
+ 1e0:	68fb      	ldr	r3, [r7, #12]
+ 1e2:	601a      	str	r2, [r3, #0]
+ 1e4:	68fb      	ldr	r3, [r7, #12]
+ 1e6:	3b04      	subs	r3, #4
+ 1e8:	60fb      	str	r3, [r7, #12]
+ 1ea:	68fb      	ldr	r3, [r7, #12]
+ 1ec:	f06f 0202 	mvn.w	r2, #2
+ 1f0:	601a      	str	r2, [r3, #0]
+ 1f2:	2300      	movs	r3, #0
+ 1f4:	607b      	str	r3, [r7, #4]
+ 1f6:	e008      	b.n	20a <init_tasks_stack+0xc4>
+ 1f8:	68fb      	ldr	r3, [r7, #12]
+ 1fa:	3b04      	subs	r3, #4
+ 1fc:	60fb      	str	r3, [r7, #12]
+ 1fe:	68fb      	ldr	r3, [r7, #12]
+ 200:	2200      	movs	r2, #0
+ 202:	601a      	str	r2, [r3, #0]
+ 204:	687b      	ldr	r3, [r7, #4]
+ 206:	3301      	adds	r3, #1
+ 208:	607b      	str	r3, [r7, #4]
+ 20a:	687b      	ldr	r3, [r7, #4]
+ 20c:	2b0c      	cmp	r3, #12
+ 20e:	ddf3      	ble.n	1f8 <init_tasks_stack+0xb2>
+ 210:	68fa      	ldr	r2, [r7, #12]
+ 212:	4908      	ldr	r1, [pc, #32]	@ (234 <init_tasks_stack+0xee>)
+ 214:	68bb      	ldr	r3, [r7, #8]
+ 216:	011b      	lsls	r3, r3, #4
+ 218:	440b      	add	r3, r1
+ 21a:	601a      	str	r2, [r3, #0]
+ 21c:	68bb      	ldr	r3, [r7, #8]
+ 21e:	3301      	adds	r3, #1
+ 220:	60bb      	str	r3, [r7, #8]
+ 222:	68bb      	ldr	r3, [r7, #8]
+ 224:	2b04      	cmp	r3, #4
+ 226:	ddc4      	ble.n	1b2 <init_tasks_stack+0x6c>
+ 228:	bf00      	nop
+ 22a:	bf00      	nop
+ 22c:	3714      	adds	r7, #20
+ 22e:	46bd      	mov	sp, r7
+ 230:	bc80      	pop	{r7}
+ 232:	4770      	bx	lr
+ 234:	00000000 	.word	0x00000000
+ 238:	20020000 	.word	0x20020000
+ 23c:	2001fc00 	.word	0x2001fc00
+ 240:	2001f800 	.word	0x2001f800
+ 244:	2001f400 	.word	0x2001f400
+ 248:	2001f000 	.word	0x2001f000
+	...
+
+00000260 <get_psp_value>:
+ 260:	b480      	push	{r7}
+ 262:	af00      	add	r7, sp, #0
+ 264:	4b04      	ldr	r3, [pc, #16]	@ (278 <get_psp_value+0x18>)
+ 266:	781b      	ldrb	r3, [r3, #0]
+ 268:	4a04      	ldr	r2, [pc, #16]	@ (27c <get_psp_value+0x1c>)
+ 26a:	011b      	lsls	r3, r3, #4
+ 26c:	4413      	add	r3, r2
+ 26e:	681b      	ldr	r3, [r3, #0]
+ 270:	4618      	mov	r0, r3
+ 272:	46bd      	mov	sp, r7
+ 274:	bc80      	pop	{r7}
+ 276:	4770      	bx	lr
+	...
+
+00000280 <save_psp_value>:
+ 280:	b480      	push	{r7}
+ 282:	b083      	sub	sp, #12
+ 284:	af00      	add	r7, sp, #0
+ 286:	6078      	str	r0, [r7, #4]
+ 288:	4b05      	ldr	r3, [pc, #20]	@ (2a0 <save_psp_value+0x20>)
+ 28a:	781b      	ldrb	r3, [r3, #0]
+ 28c:	4a05      	ldr	r2, [pc, #20]	@ (2a4 <save_psp_value+0x24>)
+ 28e:	011b      	lsls	r3, r3, #4
+ 290:	4413      	add	r3, r2
+ 292:	687a      	ldr	r2, [r7, #4]
+ 294:	601a      	str	r2, [r3, #0]
+ 296:	bf00      	nop
+ 298:	370c      	adds	r7, #12
+ 29a:	46bd      	mov	sp, r7
+ 29c:	bc80      	pop	{r7}
+ 29e:	4770      	bx	lr
+	...
+
+000002a8 <update_next_task>:
+ 2a8:	b480      	push	{r7}
+ 2aa:	b083      	sub	sp, #12
+ 2ac:	af00      	add	r7, sp, #0
+ 2ae:	23ff      	movs	r3, #255	@ 0xff
+ 2b0:	607b      	str	r3, [r7, #4]
+ 2b2:	2300      	movs	r3, #0
+ 2b4:	603b      	str	r3, [r7, #0]
+ 2b6:	e024      	b.n	302 <update_next_task+0x5a>
+ 2b8:	4b1a      	ldr	r3, [pc, #104]	@ (324 <update_next_task+0x7c>)
+ 2ba:	781b      	ldrb	r3, [r3, #0]
+ 2bc:	3301      	adds	r3, #1
+ 2be:	b2da      	uxtb	r2, r3
+ 2c0:	4b18      	ldr	r3, [pc, #96]	@ (324 <update_next_task+0x7c>)
+ 2c2:	701a      	strb	r2, [r3, #0]
+ 2c4:	4b17      	ldr	r3, [pc, #92]	@ (324 <update_next_task+0x7c>)
+ 2c6:	781a      	ldrb	r2, [r3, #0]
+ 2c8:	4b17      	ldr	r3, [pc, #92]	@ (328 <update_next_task+0x80>)
+ 2ca:	fba3 1302 	umull	r1, r3, r3, r2
+ 2ce:	0899      	lsrs	r1, r3, #2
+ 2d0:	460b      	mov	r3, r1
+ 2d2:	009b      	lsls	r3, r3, #2
+ 2d4:	440b      	add	r3, r1
+ 2d6:	1ad3      	subs	r3, r2, r3
+ 2d8:	b2da      	uxtb	r2, r3
+ 2da:	4b12      	ldr	r3, [pc, #72]	@ (324 <update_next_task+0x7c>)
+ 2dc:	701a      	strb	r2, [r3, #0]
+ 2de:	4b11      	ldr	r3, [pc, #68]	@ (324 <update_next_task+0x7c>)
+ 2e0:	781b      	ldrb	r3, [r3, #0]
+ 2e2:	4a12      	ldr	r2, [pc, #72]	@ (32c <update_next_task+0x84>)
+ 2e4:	011b      	lsls	r3, r3, #4
+ 2e6:	4413      	add	r3, r2
+ 2e8:	3308      	adds	r3, #8
+ 2ea:	781b      	ldrb	r3, [r3, #0]
+ 2ec:	607b      	str	r3, [r7, #4]
+ 2ee:	687b      	ldr	r3, [r7, #4]
+ 2f0:	2b00      	cmp	r3, #0
+ 2f2:	d103      	bne.n	2fc <update_next_task+0x54>
+ 2f4:	4b0b      	ldr	r3, [pc, #44]	@ (324 <update_next_task+0x7c>)
+ 2f6:	781b      	ldrb	r3, [r3, #0]
+ 2f8:	2b00      	cmp	r3, #0
+ 2fa:	d106      	bne.n	30a <update_next_task+0x62>
+ 2fc:	683b      	ldr	r3, [r7, #0]
+ 2fe:	3301      	adds	r3, #1
+ 300:	603b      	str	r3, [r7, #0]
+ 302:	683b      	ldr	r3, [r7, #0]
+ 304:	2b04      	cmp	r3, #4
+ 306:	ddd7      	ble.n	2b8 <update_next_task+0x10>
+ 308:	e000      	b.n	30c <update_next_task+0x64>
+ 30a:	bf00      	nop
+ 30c:	687b      	ldr	r3, [r7, #4]
+ 30e:	2b00      	cmp	r3, #0
+ 310:	d002      	beq.n	318 <update_next_task+0x70>
+ 312:	4b04      	ldr	r3, [pc, #16]	@ (324 <update_next_task+0x7c>)
+ 314:	2200      	movs	r2, #0
+ 316:	701a      	strb	r2, [r3, #0]
+ 318:	bf00      	nop
+ 31a:	370c      	adds	r7, #12
+ 31c:	46bd      	mov	sp, r7
+ 31e:	bc80      	pop	{r7}
+ 320:	4770      	bx	lr
+ 322:	bf00      	nop
+ 324:	00000000 	.word	0x00000000
+ 328:	cccccccd 	.word	0xcccccccd
+ 32c:	00000000 	.word	0x00000000
+
+00000330 <switch_sp_to_psp>:
+ 330:	b500      	push	{lr}
+ 332:	f7ff fffe 	bl	260 <get_psp_value>
+ 336:	f380 8809 	msr	PSP, r0
+ 33a:	f85d eb04 	ldr.w	lr, [sp], #4
+ 33e:	f04f 0002 	mov.w	r0, #2
+ 342:	f380 8814 	msr	CONTROL, r0
+ 346:	4770      	bx	lr
+ 348:	bf00      	nop
+
+0000034a <schedule>:
+ 34a:	b480      	push	{r7}
+ 34c:	b083      	sub	sp, #12
+ 34e:	af00      	add	r7, sp, #0
+ 350:	4b06      	ldr	r3, [pc, #24]	@ (36c <schedule+0x22>)
+ 352:	607b      	str	r3, [r7, #4]
+ 354:	687b      	ldr	r3, [r7, #4]
+ 356:	681b      	ldr	r3, [r3, #0]
+ 358:	f043 5280 	orr.w	r2, r3, #268435456	@ 0x10000000
+ 35c:	687b      	ldr	r3, [r7, #4]
+ 35e:	601a      	str	r2, [r3, #0]
+ 360:	bf00      	nop
+ 362:	370c      	adds	r7, #12
+ 364:	46bd      	mov	sp, r7
+ 366:	bc80      	pop	{r7}
+ 368:	4770      	bx	lr
+ 36a:	bf00      	nop
+ 36c:	e000ed04 	.word	0xe000ed04
+
+00000370 <task_delay>:
+ 370:	b580      	push	{r7, lr}
+ 372:	b082      	sub	sp, #8
+ 374:	af00      	add	r7, sp, #0
+ 376:	6078      	str	r0, [r7, #4]
+ 378:	4b0e      	ldr	r3, [pc, #56]	@ (3b4 <task_delay+0x44>)
+ 37a:	781b      	ldrb	r3, [r3, #0]
+ 37c:	2b00      	cmp	r3, #0
+ 37e:	d015      	beq.n	3ac <task_delay+0x3c>
+ 380:	4b0d      	ldr	r3, [pc, #52]	@ (3b8 <task_delay+0x48>)
+ 382:	681a      	ldr	r2, [r3, #0]
+ 384:	4b0b      	ldr	r3, [pc, #44]	@ (3b4 <task_delay+0x44>)
+ 386:	781b      	ldrb	r3, [r3, #0]
+ 388:	4618      	mov	r0, r3
+ 38a:	687b      	ldr	r3, [r7, #4]
+ 38c:	441a      	add	r2, r3
+ 38e:	490b      	ldr	r1, [pc, #44]	@ (3bc <task_delay+0x4c>)
+ 390:	0103      	lsls	r3, r0, #4
+ 392:	440b      	add	r3, r1
+ 394:	3304      	adds	r3, #4
+ 396:	601a      	str	r2, [r3, #0]
+ 398:	4b06      	ldr	r3, [pc, #24]	@ (3b4 <task_delay+0x44>)
+ 39a:	781b      	ldrb	r3, [r3, #0]
+ 39c:	4a07      	ldr	r2, [pc, #28]	@ (3bc <task_delay+0x4c>)
+ 39e:	011b      	lsls	r3, r3, #4
+ 3a0:	4413      	add	r3, r2
+ 3a2:	3308      	adds	r3, #8
+ 3a4:	22ff      	movs	r2, #255	@ 0xff
+ 3a6:	701a      	strb	r2, [r3, #0]
+ 3a8:	f7ff fffe 	bl	34a <schedule>
+ 3ac:	bf00      	nop
+ 3ae:	3708      	adds	r7, #8
+ 3b0:	46bd      	mov	sp, r7
+ 3b2:	bd80      	pop	{r7, pc}
+	...
+
+000003c0 <update_global_tick_count>:
+ 3c0:	b480      	push	{r7}
+ 3c2:	af00      	add	r7, sp, #0
+ 3c4:	4b04      	ldr	r3, [pc, #16]	@ (3d8 <update_global_tick_count+0x18>)
+ 3c6:	681b      	ldr	r3, [r3, #0]
+ 3c8:	3301      	adds	r3, #1
+ 3ca:	4a03      	ldr	r2, [pc, #12]	@ (3d8 <update_global_tick_count+0x18>)
+ 3cc:	6013      	str	r3, [r2, #0]
+ 3ce:	bf00      	nop
+ 3d0:	46bd      	mov	sp, r7
+ 3d2:	bc80      	pop	{r7}
+ 3d4:	4770      	bx	lr
+ 3d6:	bf00      	nop
+ 3d8:	00000000 	.word	0x00000000
+
+000003dc <unblock_tasks>:
+ 3dc:	b480      	push	{r7}
+ 3de:	b083      	sub	sp, #12
+ 3e0:	af00      	add	r7, sp, #0
+ 3e2:	2301      	movs	r3, #1
+ 3e4:	607b      	str	r3, [r7, #4]
+ 3e6:	e01b      	b.n	420 <unblock_tasks+0x44>
+ 3e8:	4a12      	ldr	r2, [pc, #72]	@ (434 <unblock_tasks+0x58>)
+ 3ea:	687b      	ldr	r3, [r7, #4]
+ 3ec:	011b      	lsls	r3, r3, #4
+ 3ee:	4413      	add	r3, r2
+ 3f0:	3308      	adds	r3, #8
+ 3f2:	781b      	ldrb	r3, [r3, #0]
+ 3f4:	2b00      	cmp	r3, #0
+ 3f6:	d010      	beq.n	41a <unblock_tasks+0x3e>
+ 3f8:	4a0e      	ldr	r2, [pc, #56]	@ (434 <unblock_tasks+0x58>)
+ 3fa:	687b      	ldr	r3, [r7, #4]
+ 3fc:	011b      	lsls	r3, r3, #4
+ 3fe:	4413      	add	r3, r2
+ 400:	3304      	adds	r3, #4
+ 402:	681a      	ldr	r2, [r3, #0]
+ 404:	4b0c      	ldr	r3, [pc, #48]	@ (438 <unblock_tasks+0x5c>)
+ 406:	681b      	ldr	r3, [r3, #0]
+ 408:	429a      	cmp	r2, r3
+ 40a:	d106      	bne.n	41a <unblock_tasks+0x3e>
+ 40c:	4a09      	ldr	r2, [pc, #36]	@ (434 <unblock_tasks+0x58>)
+ 40e:	687b      	ldr	r3, [r7, #4]
+ 410:	011b      	lsls	r3, r3, #4
+ 412:	4413      	add	r3, r2
+ 414:	3308      	adds	r3, #8
+ 416:	2200      	movs	r2, #0
+ 418:	701a      	strb	r2, [r3, #0]
+ 41a:	687b      	ldr	r3, [r7, #4]
+ 41c:	3301      	adds	r3, #1
+ 41e:	607b      	str	r3, [r7, #4]
+ 420:	687b      	ldr	r3, [r7, #4]
+ 422:	2b04      	cmp	r3, #4
+ 424:	dde0      	ble.n	3e8 <unblock_tasks+0xc>
+ 426:	bf00      	nop
+ 428:	bf00      	nop
+ 42a:	370c      	adds	r7, #12
+ 42c:	46bd      	mov	sp, r7
+ 42e:	bc80      	pop	{r7}
+ 430:	4770      	bx	lr
+ 432:	bf00      	nop
+	...
+
+0000043c <PendSV_Handler>:
+ 43c:	f3ef 8009 	mrs	r0, PSP
+ 440:	e920 0ff0 	stmdb	r0!, {r4, r5, r6, r7, r8, r9, sl, fp}
+ 444:	b500      	push	{lr}
+ 446:	f7ff fffe 	bl	280 <save_psp_value>
+ 44a:	f7ff fffe 	bl	2a8 <update_next_task>
+ 44e:	f7ff fffe 	bl	260 <get_psp_value>
+ 452:	e8b0 0ff0 	ldmia.w	r0!, {r4, r5, r6, r7, r8, r9, sl, fp}
+ 456:	f380 8809 	msr	PSP, r0
+ 45a:	f85d eb04 	ldr.w	lr, [sp], #4
+ 45e:	4770      	bx	lr
+ 460:	bf00      	nop
+
+00000462 <SysTick_Handler>:
+ 462:	b580      	push	{r7, lr}
+ 464:	b082      	sub	sp, #8
+ 466:	af00      	add	r7, sp, #0
+ 468:	4b07      	ldr	r3, [pc, #28]	@ (488 <SysTick_Handler+0x26>)
+ 46a:	607b      	str	r3, [r7, #4]
+ 46c:	f7ff fffe 	bl	3c0 <update_global_tick_count>
+ 470:	f7ff fffe 	bl	3dc <unblock_tasks>
+ 474:	687b      	ldr	r3, [r7, #4]
+ 476:	681b      	ldr	r3, [r3, #0]
+ 478:	f043 5280 	orr.w	r2, r3, #268435456	@ 0x10000000
+ 47c:	687b      	ldr	r3, [r7, #4]
+ 47e:	601a      	str	r2, [r3, #0]
+ 480:	bf00      	nop
+ 482:	3708      	adds	r7, #8
+ 484:	46bd      	mov	sp, r7
+ 486:	bd80      	pop	{r7, pc}
+ 488:	e000ed04 	.word	0xe000ed04
+
+0000048c <HardFault_Handler>:
+ 48c:	b580      	push	{r7, lr}
+ 48e:	af00      	add	r7, sp, #0
+ 490:	4801      	ldr	r0, [pc, #4]	@ (498 <HardFault_Handler+0xc>)
+ 492:	f7ff fffe 	bl	0 <puts>
+ 496:	e7fe      	b.n	496 <HardFault_Handler+0xa>
+ 498:	00000000 	.word	0x00000000
+
+0000049c <MemManage_Handler>:
+ 49c:	b580      	push	{r7, lr}
+ 49e:	af00      	add	r7, sp, #0
+ 4a0:	4801      	ldr	r0, [pc, #4]	@ (4a8 <MemManage_Handler+0xc>)
+ 4a2:	f7ff fffe 	bl	0 <puts>
+ 4a6:	e7fe      	b.n	4a6 <MemManage_Handler+0xa>
+ 4a8:	00000018 	.word	0x00000018
+
+000004ac <BusFault_Handler>:
+ 4ac:	b580      	push	{r7, lr}
+ 4ae:	af00      	add	r7, sp, #0
+ 4b0:	4801      	ldr	r0, [pc, #4]	@ (4b8 <BusFault_Handler+0xc>)
+ 4b2:	f7ff fffe 	bl	0 <puts>
+ 4b6:	e7fe      	b.n	4b6 <BusFault_Handler+0xa>
+ 4b8:	00000030 	.word	0x00000030
